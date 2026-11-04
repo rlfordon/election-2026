@@ -1,0 +1,89 @@
+county,results_url,reachable_from_cloud_session
+Adams,https://www.boe.ohio.gov/adams/election-info/election-results/,no (403 blocked)
+Allen,https://www.allen.boe.ohio.gov/election-reports,no (403 blocked)
+Ashland,https://www.boe.ohio.gov/ashland/election-info/election-results/,no (403 blocked)
+Ashtabula,https://www.boe.ohio.gov/ashtabula/election-info/election-results/,no (403 blocked)
+Athens,https://www.boe.ohio.gov/athens/election-info/election-results/,no (403 blocked)
+Auglaize,https://www.boe.ohio.gov/auglaize/election-info/election-results/,no (403 blocked)
+Belmont,https://www.boe.ohio.gov/belmont/election-info/election-results/,no (403 blocked)
+Brown,https://www.boe.ohio.gov/brown/election-info/election-results/,no (403 blocked)
+Butler,https://elections.bcohio.gov/dataandresources/results.php,yes
+Carroll,https://www.boe.ohio.gov/carroll/election-info/election-results/,no (403 blocked)
+Champaign,https://www.boe.ohio.gov/champaign/election-info/election-results/,no (403 blocked)
+Clark,https://www.boe.ohio.gov/clark/election-info/election-results/,no (403 blocked)
+Clermont,https://boe.clermontcountyohio.gov/election_results/,yes
+Clinton,https://www.boe.ohio.gov/clinton/election-info/election-results/,no (403 blocked)
+Columbiana,https://www.columbiana.boe.ohio.gov/elections/election-results/,no (403 blocked)
+Coshocton,https://www.coshocton.boe.ohio.gov/election-results/,no (403 blocked)
+Crawford,https://crawfordcountyohioboe.gov/election-results/,yes
+Cuyahoga,https://boe.cuyahogacounty.gov/elections,yes
+Darke,https://www.boe.ohio.gov/darke/election-info/election-results/,no (403 blocked)
+Defiance,https://www.boe.ohio.gov/defiance/election-info/election-results/,no (403 blocked)
+Delaware,https://vote.delawarecountyohio.gov/data/pastresults/,yes
+Erie,https://www.boe.ohio.gov/erie/election-info/election-results/,no (403 blocked)
+Fairfield,https://www.boe.ohio.gov/fairfield/election-info/election-results/,no (403 blocked)
+Fayette,https://www.boe.ohio.gov/fayette/election-info/election-results/,no (403 blocked)
+Franklin,https://vote.franklincountyohio.gov/election-info,yes
+Fulton,https://www.boe.ohio.gov/fulton/election-info/election-results/,no (403 blocked)
+Gallia,https://www.boe.ohio.gov/gallia/election-info/election-results/,no (403 blocked)
+Geauga,https://www.boe.ohio.gov/geauga/election-info/election-results/,no (403 blocked)
+Greene,https://www.boe.ohio.gov/greene/election-info/election-results/,no (403 blocked)
+Guernsey,https://boe.guernseycounty.gov/documents/,yes
+Hamilton,https://votehamiltoncountyohio.gov/results/,no (403 blocked)
+Hancock,https://hancockcountyohioelections.gov/,yes
+Hardin,https://www.boe.ohio.gov/hardin/election-info/election-results/,no (403 blocked)
+Harrison,https://www.boe.ohio.gov/harrison/election-info/election-results,no (403 blocked)
+Henry,https://henrycountyohio.gov/241/Election-Results,yes
+Highland,https://www.boe.ohio.gov/highland/election-info/election-results/,no (403 blocked)
+Hocking,https://www.boe.ohio.gov/hocking/election-info/election-results/,no (403 blocked)
+Holmes,https://www.boe.ohio.gov/holmes/election-info/election-results/,no (403 blocked)
+Huron,https://www.huron.boe.ohio.gov/election-results/,no (403 blocked)
+Jackson,https://www.boe.ohio.gov/jackson/election-info/election-results/,no (403 blocked)
+Jefferson,https://www.boe.ohio.gov/jefferson/election-info/election-results/,no (403 blocked)
+Knox,https://www.boe.ohio.gov/knox/election-info/election-results/,no (403 blocked)
+Lake,https://www.lakecountyohio.gov/boe/election-results/,yes
+Lawrence,https://www.boe.ohio.gov/lawrence/election-info/election-results/,no (403 blocked)
+Licking,https://www.boe.ohio.gov/licking/election-info/election-results/,no (403 blocked)
+Logan,https://www.boe.ohio.gov/logan/election-info/election-results/,no (403 blocked)
+Lorain,https://www.voteloraincountyohio.gov/elections-results-search,yes
+Lucas,https://www.lucascountyohiovotes.gov/historic_election_results/index.php,no (403 blocked)
+Madison,https://www.boe.ohio.gov/madison/election-info/election-results/,no (403 blocked)
+Mahoning,https://vote.mahoningcountyoh.gov/,yes
+Marion,https://www.boe.ohio.gov/marion/election-info/election-results/,no (403 blocked)
+Medina,https://www.boe.ohio.gov/medina/election-info/election-results/,no (403 blocked)
+Meigs,https://www.boe.ohio.gov/meigs/election-info/election-results/,no (403 blocked)
+Mercer,https://www.mercercountyoh.gov/county-services/elections/board-of-elections-election-results/,yes
+Miami,https://www.boe.ohio.gov/miami/election-info/election-results/,no (403 blocked)
+Monroe,https://www.boe.ohio.gov/monroe/election-info/election-results/,no (403 blocked)
+Montgomery,https://www.montgomery.boe.ohio.gov/election-results/,no (403 blocked)
+Morgan,https://www.boe.ohio.gov/morgan/election-info/election-results/,no (403 blocked)
+Morrow,https://boe.morrowcountyohio.gov/new_page/index.php,yes
+Muskingum,https://www.boe.ohio.gov/muskingum/election-information/election-results/,no (403 blocked)
+Noble,https://www.boe.ohio.gov/noble/election-info/election-results/,no (403 blocked)
+Ottawa,https://boe.ottawa.oh.gov/current-results/,yes
+Paulding,https://www.boe.ohio.gov/paulding/election-info/election-results/,no (403 blocked)
+Perry,https://www.boe.ohio.gov/perry/election-info/election-results/,no (403 blocked)
+Pickaway,https://www.boe.ohio.gov/pickaway/election-info/election-results/,no (403 blocked)
+Pike,https://www.boe.ohio.gov/pike/election-info/election-results/,no (403 blocked)
+Portage,https://www.portagecounty-oh.gov/board-elections/pages/election-results,no (403 blocked)
+Preble,https://www.boe.ohio.gov/preble/election-info/election-results/,no (403 blocked)
+Putnam,https://www.boe.ohio.gov/putnam/election-info/election-results/,no (403 blocked)
+Richland,https://www.boe.ohio.gov/richland/election-info/election-results/,no (403 blocked)
+Ross,https://www.boe.ohio.gov/ross/election-info/election-results/,no (403 blocked)
+Sandusky,https://sanduskycountyoh.gov/index.php?page=board-of-elections,yes
+Scioto,https://www.boe.ohio.gov/scioto/election-info/election-results/,no (403 blocked)
+Seneca,https://www.boe.ohio.gov/seneca/election-info/election-results/,no (403 blocked)
+Shelby,https://www.boe.ohio.gov/shelby/election-info/election-results/,no (403 blocked)
+Stark,https://www.starkcountyohio.gov/government/offices/board_of_elections/election_results/index.php,yes
+Summit,https://www.boe.ohio.gov/summit/elections,no (403 blocked)
+Trumbull,https://boe.co.trumbull.oh.gov/boe_results.html,yes
+Tuscarawas,https://www.boe.ohio.gov/tuscarawas/election-info/election-results/,no (403 blocked)
+Union,https://www.unioncountyohio.gov/departments/boe/boe-election-results,yes
+Van Wert,https://www.boe.ohio.gov/vanwert/election-info/election-results/,no (403 blocked)
+Vinton,https://www.boe.ohio.gov/vinton/election-info/election-results/,no (403 blocked)
+Warren,https://vote.warrencountyohio.gov/,yes
+Washington,https://www.boe.ohio.gov/washington/election-info/election-results/,no (403 blocked)
+Wayne,https://www.waynecountyoh.gov/election-results-past-election-results/,yes
+Williams,https://www.williamscountyoh.gov/152/Election-Results,yes
+Wood,https://boe.woodcountyohio.gov/174/Election-Results,yes
+Wyandot,https://www.boe.ohio.gov/wyandot/election-info/election-results/,no (403 blocked)

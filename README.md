@@ -86,7 +86,13 @@ civicAPI has only **162 Ohio races**: federal, statewide, General Assembly, Ohio
 For those, use:
 
 1. **Ohio Secretary of State** ([ohiosos.gov](https://www.ohiosos.gov/elections/election-results-and-data/)) for official statewide, congressional, legislative and appellate/Supreme Court results. It probably doesn't cover county offices or trial-court judges (not confirmed). The site is behind Cloudflare and blocks automated requests from this environment, so open it in a browser.
-2. **County boards of elections (88 counties)** for county offices and Common Pleas, probate, juvenile and municipal judges. Most boards post an *Election Summary Report* PDF, and the format is fairly consistent across counties. Examples:
+2. **County boards of elections (88 counties)** for county offices and Common Pleas, probate, juvenile and municipal judges. Most boards post an *Election Summary Report* PDF, and the format is fairly consistent across counties.
+
+   **`data/ohio/county_results_directory.csv`** lists every county's results page, taken from the Secretary of State's [Local Election Results directory](https://www.ohiosos.gov/directories/local-election-results) (saved from a browser on Nov 4, 2026). It also records whether the page loads from this cloud environment:
+   - **Reachable (23):** Butler, Clermont, Crawford, Cuyahoga, Delaware, Franklin, Guernsey, Hancock, Henry, Lake, Lorain, Mahoning, Mercer, Morrow, Ottawa, Sandusky, Stark, Trumbull, Union, Warren, Wayne, Williams, Wood.
+   - **Blocked (65):** the 57 counties on the shared `boe.ohio.gov` host (including Summit), plus Allen, Columbiana, Coshocton, Hamilton, Huron, Lucas, Montgomery and Portage. Download these in a browser.
+
+   Examples:
    - [Stark](https://www.starkcountyohio.gov/Board%20of%20Elections/Election%20Results/2026/General/ElectionSummaryReportRPT_Unofficial.pdf?t=202611032331260)
    - [Trumbull](https://boe.co.trumbull.oh.gov/pdfs/Election%20Summary.pdf)
    - [Lorain](https://www.boe.ohio.gov/lorain/c/elecres/20261103results.pdf)
@@ -96,7 +102,7 @@ For those, use:
    - Franklin: [vote.franklincountyohio.gov](https://vote.franklincountyohio.gov/)
    - Hamilton: [votehamiltoncountyohio.gov](https://votehamiltoncountyohio.gov/)
 
-   From this environment, Trumbull and Cuyahoga load fine. Hamilton and the shared `boe.ohio.gov` host (used by many smaller counties) block automated requests. For a blocked county, download the PDF in a browser and add it to the repo (e.g. `data/ohio/<county>.pdf`) so it can be parsed.
+   For a blocked county, download the PDF in a browser and add it to the repo (e.g. `data/ohio/<county>.pdf`) so it can be parsed.
 3. **Local news** can help cross-check judge races, but treat it as secondary. Examples: Signal Cleveland (Cuyahoga judges), Dayton Daily News (Montgomery), WOUB (Tuscarawas).
 
 All county results are **unofficial** until the official canvass is finished in late November. Provisional and late-arriving absentee ballots are still being counted.
