@@ -3,7 +3,7 @@
 Calls are civicAPI's own projections, not AP's. Attribution to civicapi.org is
 required for non-personal projects.
 
-Usage: python3 civicapi_winners.py [out_dir]
+Usage: python3 scripts/civicapi_winners.py [out_dir]   (default: data/civicapi)
 Writes:
   candidates_2026.csv  every candidate in every candidate-level race, with status
   winners_2026.csv     only candidates civicAPI has called as winners
@@ -49,7 +49,7 @@ def is_party_rollup(race):
 
 
 def main():
-    out = Path(sys.argv[1] if len(sys.argv) > 1 else "data")
+    out = Path(sys.argv[1] if len(sys.argv) > 1 else "data/civicapi")
     out.mkdir(parents=True, exist_ok=True)
     races = fetch_all()
     fields = ["candidate", "party", "status", "votes", "percent", "race_type",

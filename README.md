@@ -1,39 +1,48 @@
 # election-2026
 
-Tools and data for finding projected/called winners of the **November 3, 2026** US general election, so they can be compared against an alumni list.
+Candidate-level results and projected winners for the **November 3, 2026** US general election, plus the scripts that build them.
 
-## What's here
+- **National:** every race tracked by [civicAPI](https://civicapi.org), with civicAPI's race calls.
+- **Ohio:** county-level races (county offices, Common Pleas/probate/juvenile judges, municipal and township races) parsed from county board-of-elections reports.
 
-| Path | What it is |
-|---|---|
-| `civicapi_winners.py` | Pulls every Nov 3, 2026 US race from [civicAPI](https://civicapi.org) and writes the two CSVs below. |
-| `data/winners_2026.csv` | Candidates civicAPI has **called as winners** (~3,500 rows). |
-| `data/candidates_2026.csv` | **Every candidate** in every candidate race (~87,000 rows), with a call status. |
+All results are **unofficial** election-night counts. Certified results come after the official canvass (late November 2026).
 
-The committed CSVs are a snapshot taken around **1 pm ET on Nov 4, 2026**. Re-run the script for fresher data:
+## Layout
 
-```bash
-python3 civicapi_winners.py data
+```
+data/
+  civicapi/
+    candidates_2026.csv           every candidate in every candidate race, with call status
+    winners_2026.csv              candidates civicAPI has called as winners
+  ohio/
+    county_results_2026.csv       candidates and leaders from parsed county reports
+    county_report_status_2026.csv which report was used for each county, or why none was
+    county_results_directory.csv  results page for all 88 Ohio counties
+    reports/                      the source county PDFs
+scripts/
+  civicapi_winners.py             builds data/civicapi/
+  ohio_county_parse.py            builds data/ohio/county_results_2026.csv from county PDFs
 ```
 
-It needs only the Python 3 standard library, with no API key. A full pull fetches about 39,500 races and takes a few minutes.
+## National data (civicAPI)
 
-### CSV columns
+**Snapshot:** about 1 pm ET, Nov 4, 2026. That pull covered 39,481 races.
 
-`candidate, party, status, votes, percent, race_type, election_name, state, district, municipality, percent_reporting, race_called, race_id, race_url`
+**Columns in `data/civicapi/candidates_2026.csv`:**
 
-`status` is one of:
+| Column | Description |
+|---|---|
+| `candidate`, `party` | Candidate name (whitespace normalized) and party |
+| `status` | `WON (called)`, `lost (called)`, `leading (not called)`, or `not called` |
+| `votes`, `percent` | Current count |
+| `race_type`, `election_name` | Office, e.g. `US Senate`, `State House`, `Judicial` |
+| `state`, `district`, `municipality` | Location |
+| `percent_reporting`, `race_called` | Race progress |
+| `race_id`, `race_url` | civicAPI race id; the URL returns full detail, including county breakdowns and `called_at` |
 
-- `WON (called)`: civicAPI has called the race for this candidate
-- `lost (called)`: the race is called for someone else
-- `leading (not called)`: the race isn't called yet and this candidate has the most votes so far
-- `not called`: the race isn't called yet and this candidate isn't leading
+`winners_2026.csv` has the same columns, filtered to `WON (called)`.
 
-`race_url` returns the race's full detail from civicAPI, including county-level breakdowns and `called_at`.
-
-### What civicAPI covers
-
-Called-race counts as of the snapshot:
+**Calls at snapshot time:**
 
 | Office | Races | Called |
 |---|---|---|
@@ -45,92 +54,87 @@ Called-race counts as of the snapshot:
 | State House | 4,574 | 2,257 |
 | Local (mayor, council, school board, judges, county offices, etc.) | ~30,000 | almost none |
 
-### Caveats
+**Notes:**
 
-- **The calls are civicAPI's own projections, not AP's or any network's.** civicAPI doesn't publish how it makes them, and they haven't been checked against AP.
-- **Local races have vote counts but essentially no calls.** For these, `leading (not called)` is the most you'll get.
-- **Some races are left out of the CSVs:** referendums, and about 90 state-legislative or national rows that only report totals by party.
-- **Name matching:** civicAPI keeps middle initials and nicknames (e.g. `Jonathan S. "JKT" Kreiss-Tomkins`). Match on fuzzy name + state rather than exact name.
-- **Blocked user agent:** civicAPI blocks Python's default user agent, so the script sends its own.
-- **Attribution required:** civicAPI's terms require crediting **civicapi.org** in anything shared beyond personal use.
+- **Calls are civicAPI's own projections**, not AP's or any network's. civicAPI doesn't publish its methodology.
+- **Local races have vote counts but almost no calls.**
+- **Excluded:** referendums, and about 90 state-legislative or national rows that only report totals by party.
+- **Names** keep middle initials and nicknames as published (e.g. `Jonathan S. "JKT" Kreiss-Tomkins`).
 
-## Getting other races
+**Refresh** (Python 3 standard library only, no API key, takes a few minutes):
 
-### AP Elections API (paid, includes race calls)
+```bash
+python3 scripts/civicapi_winners.py            # writes data/civicapi/
+```
 
-This is the authoritative source for race calls, but it needs a licensed AP key (`api.ap.org` is reachable from this environment; it answers `403` without a key). To use it, add the key in the cloud environment settings as **`AP_API_KEY`** under Network secrets (or as an environment variable), then start a new session. Don't paste keys into chat.
+## Ohio county data
 
-### Open America (free, no calls)
+**What civicAPI covers in Ohio:** 162 races. That's federal, statewide, General Assembly, Ohio Supreme Court and Courts of Appeals. At snapshot time:
 
-`https://openamerica.io/elections/results.json?year=2026&office=House|Senate|Governor`
+- The Court of Appeals races showed 0% reporting.
+- The SoS, AG, Treasurer and Auditor races were uncalled at 100% reporting.
 
-This is a free feed of House, Senate and Governor vote counts from official state election offices. It needs no key and has no quota.
+**What civicAPI doesn't cover:** county offices, trial-court judges and local races. Those are only published by the 88 county boards of elections, so this repo parses those boards' summary reports.
 
-- It covers **22 states** only.
-- It makes **no race calls**. Its `leader` field just shows who's ahead in the count.
-- Attribution: "official state election offices via Open America (openamerica.io)", shown with the feed's `as_of` timestamp.
+### `data/ohio/county_results_2026.csv`
 
-### State and county election offices (official)
+**Coverage:** 11 counties (Clermont, Crawford, Cuyahoga, Guernsey, Ottawa, Sandusky, Stark, Trumbull, Wayne, Williams, Wood). That's 442 candidate rows across about 220 races. Ballot issues are excluded.
 
-These are the most authoritative source, and for most **local, county and trial-court judicial races** they're the only one. Formats vary: some offices publish JSON (e.g. Virginia Dept. of Elections, LA County), but most publish PDF summary reports. Nobody "calls" these races; the winner is whoever leads the certified count.
+**Columns:**
 
-### Ohio specifically
+| Column | Description |
+|---|---|
+| `county`, `contest`, `vote_for` | Contest as printed in the report, and the number of seats |
+| `candidate`, `party`, `votes`, `percent` | Write-ins are excluded |
+| `rank`, `status` | `leading` (top N for a "vote for N" contest), `trailing`, or `unopposed`. Counties don't call races. |
+| `contested` | Whether there are more candidates than seats |
+| `total_check` | Parsed votes compared with the report's own contest total. Every contest is `ok`; Wood's report prints no totals (`no total in report`). |
+| `source_url` | The report the row came from (copy in `reports/`) |
 
-civicAPI has only **162 Ohio races**: federal, statewide, General Assembly, Ohio Supreme Court and Courts of Appeals. Known gaps as of the snapshot:
+**Notes:**
 
-- **Court of Appeals:** all 22 races show 0% reporting, so this data looks stale.
-- **Supreme Court:** both races show 100% reporting but are uncalled.
-- **Other statewide offices:** SoS, AG, Treasurer and Auditor all show 100% reporting with the leader near 50.5%, and none is called.
-- **Not covered at all:** county offices (commissioner, auditor, prosecutor, sheriff), Common Pleas, probate, juvenile and municipal judges, and city or township races.
+- Governor/Lt. Governor ticket names that wrap in the PDFs can be truncated (e.g. `Vivek Ramaswamy and`). Use the civicAPI data for statewide races.
+- Report run times and precinct counts are in `county_report_status_2026.csv`.
+- Ottawa's and Sandusky's reports are early-evening runs. Later versions may exist.
 
-For those, use:
+### Counties not yet included
 
-1. **Ohio Secretary of State** ([ohiosos.gov](https://www.ohiosos.gov/elections/election-results-and-data/)) for official statewide, congressional, legislative and appellate/Supreme Court results. It probably doesn't cover county offices or trial-court judges (not confirmed). The site is behind Cloudflare and blocks automated requests from this environment, so open it in a browser.
-2. **County boards of elections (88 counties)** for county offices and Common Pleas, probate, juvenile and municipal judges. Most boards post an *Election Summary Report* PDF, and the format is fairly consistent across counties.
+`county_report_status_2026.csv` covers the 23 counties whose sites allow automated access:
 
-   **`data/ohio/county_results_directory.csv`** lists every county's results page, taken from the Secretary of State's [Local Election Results directory](https://www.ohiosos.gov/directories/local-election-results) (saved from a browser on Nov 4, 2026). It also records whether the page loads from this cloud environment:
-   - **Reachable (23):** Butler, Clermont, Crawford, Cuyahoga, Delaware, Franklin, Guernsey, Hancock, Henry, Lake, Lorain, Mahoning, Mercer, Morrow, Ottawa, Sandusky, Stark, Trumbull, Union, Warren, Wayne, Williams, Wood.
-   - **Blocked (65):** the 57 counties on the shared `boe.ohio.gov` host (including Summit), plus Allen, Columbiana, Coshocton, Hamilton, Huron, Lucas, Montgomery and Portage. Download these in a browser.
+| Reason | Counties |
+|---|---|
+| Report found but not parsed | Mercer (scanned image), Union (precinct-level report only) |
+| Results only on `liveresults.boe.ohio.gov`, which blocks automated access | Butler, Warren |
+| Report hosted on `boe.ohio.gov`, which blocks automated access | Lorain |
+| No Nov 3 summary report found when checked | Delaware, Franklin, Hancock, Henry, Lake, Mahoning, Morrow |
 
-   **County results we've parsed** are in `data/ohio/county_results_2026.csv`. It covers 11 counties: Clermont, Crawford, Cuyahoga, Guernsey, Ottawa, Sandusky, Stark, Trumbull, Wayne, Williams and Wood. It has one row per candidate in every candidate race on those ballots, from federal down to county commissioner, auditor and Common Pleas/probate judges. Ballot issues are excluded.
-   - `status` is `leading`, `trailing` or `unopposed`. Leading means in the top N of a "vote for N" race in the unofficial count; **counties don't call races.**
-   - `total_check` compares the parsed votes against the report's own contest total. Every contest checks `ok`, except Wood, whose report prints no totals.
-   - Governor/Lt. Governor ticket names that wrap in the PDF can be cut short (e.g. `Vivek Ramaswamy and`). Use civicAPI for statewide races.
-   - The source PDFs are saved in `data/ohio/reports/`. `data/ohio/county_report_status_2026.csv` records, for each reachable county, which report was used (run time, precincts in), or why none was parsed:
-     - Mercer: scanned image
-     - Union: precinct-level only
-     - Butler, Warren: only on the blocked live-results site
-     - Delaware, Franklin, Hancock, Henry, Lake, Mahoning, Morrow: no Nov 3 report found when checked
-     - Lorain: report is on the blocked `boe.ohio.gov` host
-   - Ottawa's and Sandusky's reports are early-evening runs (around 9 pm); check for later versions.
+The other **65 counties** block automated access. These are the 57 counties on the shared `boe.ohio.gov` host (including Summit), plus Allen, Columbiana, Coshocton, Hamilton, Huron, Lucas, Montgomery and Portage. `county_results_directory.csv` lists every county's results page, taken from the Ohio Secretary of State's [Local Election Results directory](https://www.ohiosos.gov/directories/local-election-results).
 
-   To parse more counties, save their summary PDFs (e.g. ones you download from blocked sites) and run:
+### Adding a county
+
+1. Download the county's *Election Summary* PDF from its results page (see `county_results_directory.csv`) into `data/ohio/reports/`.
+2. Re-run the parser, listing every county to include. The output file is rewritten.
 
    ```bash
-   python3 ohio_county_parse.py data/ohio/county_results_2026.csv \
-     Hamilton=data/ohio/reports/Hamilton.pdf@<source url> Stark=...   # list every county; the CSV is rewritten
+   python3 scripts/ohio_county_parse.py data/ohio/county_results_2026.csv \
+     Clermont=data/ohio/reports/Clermont-2026-11-03-unofficial.pdf@<source url> \
+     Hamilton=data/ohio/reports/Hamilton-2026-11-03-unofficial.pdf@<source url> ...
    ```
 
-   It needs `pdftotext` (poppler-utils). The parser handles the common ES&S/Hart/Dominion "Election Summary" layouts. Check `total_check` on any new county.
+3. Check `total_check` for the new county.
 
-   Examples:
-   - [Stark](https://www.starkcountyohio.gov/Board%20of%20Elections/Election%20Results/2026/General/ElectionSummaryReportRPT_Unofficial.pdf?t=202611032331260)
-   - [Trumbull](https://boe.co.trumbull.oh.gov/pdfs/Election%20Summary.pdf)
-   - [Lorain](https://www.boe.ohio.gov/lorain/c/elecres/20261103results.pdf)
-   - [Ashtabula](https://www.boe.ohio.gov/ashtabula/c/elecres/20261103results.pdf)
-   - [Geauga](https://www.boe.ohio.gov/geauga/c/elecres/20261103precinct.pdf)
-   - Cuyahoga: [boe.cuyahogacounty.gov](https://boe.cuyahogacounty.gov/)
-   - Franklin: [vote.franklincountyohio.gov](https://vote.franklincountyohio.gov/)
-   - Hamilton: [votehamiltoncountyohio.gov](https://votehamiltoncountyohio.gov/)
+The parser needs `pdftotext` (poppler-utils). It handles the common ES&S, Hart and Dominion summary layouts used by Ohio counties.
 
-   For a blocked county, download the PDF in a browser and add it to the repo (e.g. `data/ohio/<county>.pdf`) so it can be parsed.
-3. **Local news** can help cross-check judge races, but treat it as secondary. Examples: Signal Cleveland (Cuyahoga judges), Dayton Daily News (Montgomery), WOUB (Tuscarawas).
+## Other sources
 
-All county results are **unofficial** until the official canvass is finished in late November. Provisional and late-arriving absentee ballots are still being counted.
+| Source | Cost | Calls? | Notes |
+|---|---|---|---|
+| [AP Elections API](https://developer.ap.org/ap-elections-api/) | Paid (licensed key) | Yes | The standard source for race calls |
+| [Open America](https://openamerica.io/elections/api/) | Free, no key | No | House, Senate and Governor counts from official state feeds; 22 states. `results.json?year=2026&office=House\|Senate\|Governor` |
+| [Ohio Secretary of State](https://www.ohiosos.gov/elections/election-results-and-data/) | Free | No | Official statewide, congressional, legislative and appellate results |
+| State and county election offices | Free | No | The only source for most local and trial-court races. Mostly PDFs; some publish JSON (e.g. Virginia, LA County) |
 
-## Suggested workflow for the alumni comparison
+## Attribution
 
-1. Add the alum list as a CSV in the repo, with name, state, and county/court if known. Don't paste it into chat.
-2. Match it against `data/candidates_2026.csv` on fuzzy name + state.
-3. For alumni in local or judicial races not in civicAPI, especially in Ohio, pull those counties' summary PDFs and parse them.
-4. Re-check close or uncalled races after certification.
+- **civicAPI** data requires attribution to [civicapi.org](https://civicapi.org) for non-personal use.
+- **Ohio county results** come from each county's board of elections. Source URLs are in the data.

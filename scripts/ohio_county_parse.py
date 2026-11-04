@@ -6,7 +6,7 @@ counties. Results are UNOFFICIAL election-night counts; "winner" means the
 candidate(s) leading the count (top N for a "vote for N" contest), not a call.
 
 Usage:
-  python3 ohio_county_parse.py OUT.csv COUNTY=report.pdf[@source_url] ...
+  python3 scripts/ohio_county_parse.py OUT.csv COUNTY=report.pdf[@source_url] ...
 (.pdf files are converted with `pdftotext -layout`; .txt files are read as-is.)
 """
 import csv

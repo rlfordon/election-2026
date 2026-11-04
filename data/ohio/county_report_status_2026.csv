@@ -12,13 +12,13 @@ Williams,parsed,11/03/2026 9:24 PM,,https://www.williamscountyoh.gov/DocumentCen
 Wood,parsed,11/03/2026 11:15 PM,99 of 99,https://boe.woodcountyohio.gov/DocumentCenter/View/1028/Unofficial-Results,Report has no contest totals so parse could not be cross-checked
 Mercer,found - not parsed,,,https://www.mercercountyoh.gov/bskpdf/11-03-2026-mercer-unofficial-election-summary/,Scanned image PDF; needs OCR or manual reading
 Union,found - not parsed,,,https://www.unioncountyohio.gov/media/Agencies/Board%20of%20Elections/SOVC_Nov_3_2026-with_write-ins.pdf,Precinct-level report only (111 pages); candidate names wrap across column headers
-Butler,not found,,,https://elections.bcohio.gov/dataandresources/results.php,Results only on liveresults.boe.ohio.gov (blocked from cloud)
-Warren,not found,,,https://vote.warrencountyohio.gov/,Results only on liveresults.boe.ohio.gov (blocked from cloud)
+Butler,not found,,,https://elections.bcohio.gov/dataandresources/results.php,Results only on liveresults.boe.ohio.gov (blocks automated access)
+Warren,not found,,,https://vote.warrencountyohio.gov/,Results only on liveresults.boe.ohio.gov (blocks automated access)
 Delaware,not found,,,https://vote.delawarecountyohio.gov/data/pastresults/,No Nov 2026 report posted when checked
 Franklin,not found,,,https://vote.franklincountyohio.gov/,No Nov 2026 report link found on site
 Hancock,not found,,,https://hancockcountyohioelections.gov/live/,Only write-in report found
 Henry,not found,,,https://henrycountyohio.gov/420/2026-November-General-Election,Page had no report link (connection unreliable)
 Lake,not found,,,https://www.lakecountyohio.gov/boe/election-results/,Only May 2026 primary posted when checked
-Lorain,not found,,,https://www.voteloraincountyohio.gov/elections-results-search,Report is on boe.ohio.gov (blocked): https://www.boe.ohio.gov/lorain/c/elecres/20261103results.pdf
+Lorain,not found,,,https://www.voteloraincountyohio.gov/elections-results-search,Report is on boe.ohio.gov (blocks automated access): https://www.boe.ohio.gov/lorain/c/elecres/20261103results.pdf
 Mahoning,not found,,,https://vote.mahoningcountyoh.gov/,No Nov 2026 report link found on site
 Morrow,not found,,,https://boe.morrowcountyohio.gov/,Headline posted but no file link
