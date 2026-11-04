@@ -129,7 +129,9 @@ The parser needs `pdftotext` (poppler-utils). It handles the common ES&S, Hart a
 
 | Source | Cost | Calls? | Notes |
 |---|---|---|---|
-| [AP Elections API](https://developer.ap.org/ap-elections-api/) | Paid (licensed key) | Yes | The standard source for race calls |
+| AP Elections API | Paid (licensed key) | Yes | The standard source for race calls |
+| [pushbuild/us-2026-election-results](https://github.com/pushbuild/us-2026-election-results) | Free, CC0 | No | Statewide and county-level CSVs read from official state feeds for about 40 states. Its Ohio file comes from the Secretary of State's feed: the same 162 state-level races as civicAPI, including Court of Appeals vote counts, but no county offices or trial-court judges |
+| [openelections/openelections-data-oh](https://github.com/openelections/openelections-data-oh) | Free | No | Historical Ohio results (through 2020); useful for prior-cycle comparisons |
 | [Open America](https://openamerica.io/elections/api/) | Free, no key | No | House, Senate and Governor counts from official state feeds; 22 states. `results.json?year=2026&office=House\|Senate\|Governor` |
 | [Ohio Secretary of State](https://www.ohiosos.gov/elections/election-results-and-data/) | Free | No | Official statewide, congressional, legislative and appellate results |
 | State and county election offices | Free | No | The only source for most local and trial-court races. Mostly PDFs; some publish JSON (e.g. Virginia, LA County) |
