@@ -7,6 +7,7 @@ candidate(s) leading the count (top N for a "vote for N" contest), not a call.
 
 Usage:
   python3 scripts/ohio_county_parse.py OUT.csv COUNTY=report.pdf[@source_url] ...
+(Used as a module by build_ohio.py; the command line is for checking a single report.)
 (.pdf files are converted with `pdftotext -layout`; .txt files are read as-is.)
 """
 import csv
@@ -29,6 +30,9 @@ HEADER_NOISE = re.compile(r"(november 3, 2026|county, ohio|general election|page
 def contest_name(lines, i):
     line = lines[i]
     before = VOTE_FOR.split(line)[0].strip(" -–(")
+    # A long contest name can wrap: "...Division) (FTC" / "02/09/27) (Vote for 1)".
+    if before.count(")") > before.count("(") and i > 0 and lines[i - 1].strip():
+        before = lines[i - 1].strip() + " " + before
     if len(before) > 3:
         name = before
     else:
@@ -103,7 +107,7 @@ def parse(text):
                 write_in_votes += c["votes"]
             elif c:
                 cands.append(c)
-        if not cands or all(re.match(r"(yes|no|for|against)\b", c["candidate"], re.I)
+        if not cands or all(re.match(r"(yes|no|for|against|approval|rejection)\b", c["candidate"], re.I)
                             for c in cands):
             continue  # ballot issue, not a candidate race
         # The report's own total, to check the parse against.
