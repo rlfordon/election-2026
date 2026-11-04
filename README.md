@@ -92,6 +92,27 @@ For those, use:
    - **Reachable (23):** Butler, Clermont, Crawford, Cuyahoga, Delaware, Franklin, Guernsey, Hancock, Henry, Lake, Lorain, Mahoning, Mercer, Morrow, Ottawa, Sandusky, Stark, Trumbull, Union, Warren, Wayne, Williams, Wood.
    - **Blocked (65):** the 57 counties on the shared `boe.ohio.gov` host (including Summit), plus Allen, Columbiana, Coshocton, Hamilton, Huron, Lucas, Montgomery and Portage. Download these in a browser.
 
+   **County results we've parsed** are in `data/ohio/county_results_2026.csv`. It covers 11 counties: Clermont, Crawford, Cuyahoga, Guernsey, Ottawa, Sandusky, Stark, Trumbull, Wayne, Williams and Wood. It has one row per candidate in every candidate race on those ballots, from federal down to county commissioner, auditor and Common Pleas/probate judges. Ballot issues are excluded.
+   - `status` is `leading`, `trailing` or `unopposed`. Leading means in the top N of a "vote for N" race in the unofficial count; **counties don't call races.**
+   - `total_check` compares the parsed votes against the report's own contest total. Every contest checks `ok`, except Wood, whose report prints no totals.
+   - Governor/Lt. Governor ticket names that wrap in the PDF can be cut short (e.g. `Vivek Ramaswamy and`). Use civicAPI for statewide races.
+   - The source PDFs are saved in `data/ohio/reports/`. `data/ohio/county_report_status_2026.csv` records, for each reachable county, which report was used (run time, precincts in), or why none was parsed:
+     - Mercer: scanned image
+     - Union: precinct-level only
+     - Butler, Warren: only on the blocked live-results site
+     - Delaware, Franklin, Hancock, Henry, Lake, Mahoning, Morrow: no Nov 3 report found when checked
+     - Lorain: report is on the blocked `boe.ohio.gov` host
+   - Ottawa's and Sandusky's reports are early-evening runs (around 9 pm); check for later versions.
+
+   To parse more counties, save their summary PDFs (e.g. ones you download from blocked sites) and run:
+
+   ```bash
+   python3 ohio_county_parse.py data/ohio/county_results_2026.csv \
+     Hamilton=data/ohio/reports/Hamilton.pdf@<source url> Stark=...   # list every county; the CSV is rewritten
+   ```
+
+   It needs `pdftotext` (poppler-utils). The parser handles the common ES&S/Hart/Dominion "Election Summary" layouts. Check `total_check` on any new county.
+
    Examples:
    - [Stark](https://www.starkcountyohio.gov/Board%20of%20Elections/Election%20Results/2026/General/ElectionSummaryReportRPT_Unofficial.pdf?t=202611032331260)
    - [Trumbull](https://boe.co.trumbull.oh.gov/pdfs/Election%20Summary.pdf)
