@@ -3,7 +3,10 @@
 Candidate-level results and projected winners for the **November 3, 2026** US general election, plus the scripts that build them.
 
 - **National:** every race tracked by [civicAPI](https://civicapi.org), with civicAPI's race calls.
-- **Ohio:** county-level races (county offices, Common Pleas/probate/juvenile judges, municipal and township races) parsed from county board-of-elections reports.
+- **Ohio:**
+  - Statewide, congressional, legislative and appellate races from the Ohio Secretary of State's results feed, via [Pushbuild](https://github.com/pushbuild/us-2026-election-results).
+  - County-level races (county offices, Common Pleas/probate/juvenile judges, municipal and township races) parsed from county board-of-elections reports.
+- **Other states:** see [Other states](#other-states) for Pushbuild's per-state files.
 
 All results are **unofficial** election-night counts. Certified results come after the official canvass (late November 2026).
 
@@ -15,6 +18,8 @@ data/
     candidates_2026.csv           every candidate in every candidate race, with call status
     winners_2026.csv              candidates civicAPI has called as winners
   ohio/
+    oh_sos_feed_2026.csv          Secretary of State feed via Pushbuild (statewide + by-county rows)
+    oh_state_races_2026.csv       statewide candidate rows with leading/trailing/unopposed
     county_results_2026.csv       candidates and leaders from parsed county reports
     county_report_status_2026.csv which report was used for each county, or why none was
     county_results_directory.csv  results page for all 88 Ohio counties
@@ -22,6 +27,7 @@ data/
 scripts/
   civicapi_winners.py             builds data/civicapi/
   ohio_county_parse.py            builds data/ohio/county_results_2026.csv from county PDFs
+  pushbuild_state.py              builds data/ohio/oh_*.csv (or any state's) from Pushbuild
 ```
 
 ## National data (civicAPI)
@@ -67,7 +73,7 @@ scripts/
 python3 scripts/civicapi_winners.py            # writes data/civicapi/
 ```
 
-## Ohio county data
+## Ohio data
 
 **What civicAPI covers in Ohio:** 162 races. That's federal, statewide, General Assembly, Ohio Supreme Court and Courts of Appeals. At snapshot time:
 
@@ -75,6 +81,26 @@ python3 scripts/civicapi_winners.py            # writes data/civicapi/
 - The SoS, AG, Treasurer and Auditor races were uncalled at 100% reporting.
 
 **What civicAPI doesn't cover:** county offices, trial-court judges and local races. Those are only published by the 88 county boards of elections, so this repo parses those boards' summary reports.
+
+### State-level races: `oh_sos_feed_2026.csv` and `oh_state_races_2026.csv`
+
+These come from the Ohio Secretary of State's results feed, as collected by [pushbuild/us-2026-election-results](https://github.com/pushbuild/us-2026-election-results) (CC0). The snapshot was fetched 12:15 pm ET, Nov 4, 2026, with all precincts reporting in every contest.
+
+**What's covered:** 162 contests. That's U.S. Senate, Governor and the other statewide offices, the Supreme Court, all Court of Appeals seats, U.S. House, the General Assembly, and State Issue 3. Unlike civicAPI, the Court of Appeals races here have vote counts.
+
+**What's not covered:** the feed has no county offices or trial-court judges. For those, see the county data below.
+
+**The two files:**
+
+- **`oh_sos_feed_2026.csv`** is Pushbuild's file, unchanged. It has 340 statewide rows plus 3,360 rows breaking each contest down by county, across all 88 counties.
+  - **Columns:** `state, level, county, contest, candidate, party, votes, pct, contestTotalVotes, precinctsReporting, precinctsTotal, source, sourceUrl, sourceUpdatedAt, fetchedAt`
+- **`oh_state_races_2026.csv`** has the statewide rows only, ranked within each contest. `status` is `leading`, `trailing` or `unopposed`; nobody calls these races, so "leading" just means first in the count. State Issue 3 appears with `Yes`/`No` as its "candidates".
+
+**Refresh** (Python 3 standard library only):
+
+```bash
+python3 scripts/pushbuild_state.py OH data/ohio
+```
 
 ### `data/ohio/county_results_2026.csv`
 
@@ -125,12 +151,26 @@ The other **65 counties** block automated access. These are the 57 counties on t
 
 The parser needs `pdftotext` (poppler-utils). It handles the common ES&S, Hart and Dominion summary layouts used by Ohio counties.
 
+## Other states
+
+[pushbuild/us-2026-election-results](https://github.com/pushbuild/us-2026-election-results) (CC0) publishes one CSV per state (`data/<st>.csv`), read from each state's official results feed. Each file has statewide rows, and county rows where the state provides them. It uses the same columns as `oh_sos_feed_2026.csv` above.
+
+- **Coverage:** 40 states, with a snapshot as of about noon ET, Nov 4, 2026. Pushbuild says it will refresh after certification.
+- **Uneven depth:** some states have full statewide and county results (e.g. TX, IN, MN, GA, NC, CO). Some have statewide totals only (e.g. CA, NE, VT). Some cover only a few counties (e.g. MI, NJ, WI). A few were still placeholder candidate lists at snapshot time (e.g. IL, MA, NY, WY). Pushbuild's README has the per-state table.
+- **Local contests:** included where the state's feed has them. Most state feeds don't carry county offices or trial-court judges.
+
+To pull any state into this repo in the same format as Ohio:
+
+```bash
+python3 scripts/pushbuild_state.py TX data/texas
+```
+
 ## Other sources
 
 | Source | Cost | Calls? | Notes |
 |---|---|---|---|
 | AP Elections API | Paid (licensed key) | Yes | The standard source for race calls |
-| [pushbuild/us-2026-election-results](https://github.com/pushbuild/us-2026-election-results) | Free, CC0 | No | Statewide and county-level CSVs read from official state feeds for about 40 states. Its Ohio file comes from the Secretary of State's feed: the same 162 state-level races as civicAPI, including Court of Appeals vote counts, but no county offices or trial-court judges |
+| [pushbuild/us-2026-election-results](https://github.com/pushbuild/us-2026-election-results) | Free, CC0 | No | Per-state CSVs from official state feeds; see [Other states](#other-states) |
 | [openelections/openelections-data-oh](https://github.com/openelections/openelections-data-oh) | Free | No | Historical Ohio results (through 2020); useful for prior-cycle comparisons |
 | [Open America](https://openamerica.io/elections/api/) | Free, no key | No | House, Senate and Governor counts from official state feeds; 22 states. `results.json?year=2026&office=House\|Senate\|Governor` |
 | [Ohio Secretary of State](https://www.ohiosos.gov/elections/election-results-and-data/) | Free | No | Official statewide, congressional, legislative and appellate results |
@@ -140,3 +180,4 @@ The parser needs `pdftotext` (poppler-utils). It handles the common ES&S, Hart a
 
 - **civicAPI** data requires attribution to [civicapi.org](https://civicapi.org) for non-personal use.
 - **Ohio county results** come from each county's board of elections. Source URLs are in the data.
+- **Ohio state-level results** come from the Ohio Secretary of State, via [Pushbuild](https://github.com/pushbuild/us-2026-election-results) (CC0 1.0; Pushbuild is not affiliated with any election office).
